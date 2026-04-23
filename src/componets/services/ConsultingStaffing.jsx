@@ -15,11 +15,20 @@ const C = {
 function useInView(threshold = 0.12) {
   const ref = useRef(null);
   const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
+const thresholdRef = useRef(0.3);
+
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) setInView(true);
+    },
+    { threshold: thresholdRef.current }
+  );
+
+  if (ref.current) observer.observe(ref.current);
+
+  return () => observer.disconnect();
+}, []);
   return [ref, inView];
 }
 

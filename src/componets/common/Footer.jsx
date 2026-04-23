@@ -167,8 +167,7 @@ const Footer = () => {
   <div className="footer-title">Services</div>
 
   {[
-    { name: "Cloud Management", path: "/cloudManagement" },
-    { name: "Enterprise Management", path: "/enterpriseManagement" },
+    { name: "Enterprise Management", path: "/enterprise-management" },
     { name: "Data & AI", path: "/dataAI" },
     { name: "Consulting & Staffing", path: "/consultingStaffing" },
     { name: "Background Verification", path: "/backgroundVerification" },

@@ -345,7 +345,7 @@ const Home = () => {
                 <p>SHNOOR International LLC is a dynamic organization formed to work progressively across IT Consulting & Staffing, IT Product Development, Application Designing & Development, and SAP Outsourcing.</p>
                 <p>Headquartered in Muscat, Oman, we specialize in import and export of quality products from India to UAE, Bahrain, Qatar, and Malaysia—building strong trade bridges and lasting global partnerships.</p>
               </div>
-              <a href="/about" className="btn-primary" style={{marginTop:"8px"}}>Our Story →</a>
+             
             </div>
           </div>
         </div>
@@ -390,7 +390,7 @@ const Home = () => {
               <div className="tag">Latest Insights</div>
               <h2 className="sec-title" style={{margin:0}}>News & <span>Updates</span></h2>
             </div>
-            <a href="/blog" className="btn-ghost">View All →</a>
+            
           </div>
           <div className="insights-grid">
             {[

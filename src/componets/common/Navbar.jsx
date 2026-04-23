@@ -11,10 +11,10 @@ const Navbar = () => {
       <style>{`
         .custom-navbar {
           top: 0;
-          z-index: 9999; 
-          position: relative; 
-          overflow: visible; 
-          background: rgba(15, 23, 42, 0.9);
+          z-index: 9999;
+          position: relative;
+          overflow: visible;
+          background: rgba(15, 23, 42, 0.98);
           backdrop-filter: blur(14px);
           border-bottom: 1px solid rgba(255,255,255,0.08);
         }
@@ -30,7 +30,7 @@ const Navbar = () => {
           align-items: center;
           justify-content: space-between;
           height: 110px;
-          overflow: visible; 
+          overflow: visible;
         }
 
         .nav-logo img {
@@ -85,7 +85,6 @@ const Navbar = () => {
         .active-link::after {
           width: 100%;
         }
-
         .dropdown {
           position: relative;
         }
@@ -101,7 +100,7 @@ const Navbar = () => {
           display: none;
           flex-direction: column;
           box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-          z-index: 9999; 
+          z-index: 9999;
         }
 
         .dropdown:hover .dropdown-menu {
@@ -118,21 +117,24 @@ const Navbar = () => {
         .dropdown-menu a:hover {
           background: #334155;
         }
-
         .menu-toggle {
           display: none;
-          font-size: 32px;
+          font-size: 28px;
           color: #E2E8F0;
           cursor: pointer;
+          background: none;
+          border: none;
+          padding: 4px 8px;
+          line-height: 1;
         }
-
         @media (max-width: 900px) {
           .nav-inner {
-            height: 90px;
+            height: 80px;
+            position: relative;
           }
 
           .nav-logo img {
-            height: 70px;
+            height: 64px;
           }
 
           .menu-toggle {
@@ -141,35 +143,117 @@ const Navbar = () => {
 
           .nav-links {
             position: absolute;
-            top: 90px;
+            top: 80px;
             left: 0;
             width: 100%;
             background: #0F172A;
             flex-direction: column;
-            padding: 30px;
-            gap: 24px;
+            align-items: stretch;
+            padding: 16px 0 24px;
+            gap: 0;
             display: none;
             border-top: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
           }
 
           .nav-links.open {
             display: flex;
           }
-
-          .dropdown-menu {
-            position: static;
-            display: ${servicesOpen ? "flex" : "none"};
-            background: transparent;
-            box-shadow: none;
-            padding-left: 10px;
+          .nav-links > a.nav-link-custom {
+            font-size: 15px;
+            padding: 14px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #CBD5E1;
           }
 
-          .dropdown:hover .dropdown-menu {
+          .nav-links > a.nav-link-custom:hover,
+          .nav-links > a.nav-link-custom.active-link {
+            background: rgba(99,102,241,0.08);
+            color: #818CF8;
+          }
+
+          .nav-links > a.nav-link-custom::after {
             display: none;
           }
 
-          .nav-link-custom {
-            font-size: 18px;
+          .dropdown {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+          }
+
+          .services-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #CBD5E1;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+          }
+
+          .services-toggle:hover {
+            background: rgba(99,102,241,0.08);
+          }
+
+          .services-chevron {
+            font-size: 12px;
+            transition: transform 0.25s ease;
+            color: #6366F1;
+          }
+
+          .services-chevron.open {
+            transform: rotate(180deg);
+          }
+
+          .dropdown-menu {
+            position: static !important;
+            display: flex !important;
+            flex-direction: column;
+            background: rgba(30,41,59,0.6);
+            box-shadow: none;
+            border-radius: 0;
+            padding: 0;
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+          }
+
+          .dropdown-menu.mobile-open {
+            max-height: 400px;
+            padding: 6px 0;
+          }
+
+          .dropdown-menu a {
+            padding: 12px 24px 12px 40px;
+            font-size: 14px;
+            color: #94A3B8;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          .dropdown-menu a::before {
+            content: "›";
+            color: #6366F1;
+            font-size: 16px;
+            font-weight: 700;
+          }
+
+          .dropdown-menu a:hover {
+            background: rgba(99,102,241,0.1);
+            color: #E2E8F0;
+          }
+          .dropdown:hover .dropdown-menu {
+            max-height: 0;
+            padding: 0;
+          }
+
+          .dropdown:hover .dropdown-menu.mobile-open {
+            max-height: 400px;
+            padding: 6px 0;
           }
         }
       `}</style>
@@ -181,12 +265,13 @@ const Navbar = () => {
               <img src={logo} alt="logo" />
             </NavLink>
 
-            <div
+            <button
               className="menu-toggle"
               onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle menu"
             >
-              ☰
-            </div>
+              {menuOpen ? "✕" : "☰"}
+            </button>
 
             <div className={`nav-links ${menuOpen ? "open" : ""}`}>
               {[
@@ -198,30 +283,32 @@ const Navbar = () => {
                 { name: "ExportManagement", path: "/export-management" },
                 { name: "Contact", path: "/contact" },
               ].map((item, i) => {
-
                 if (item.name === "Services") {
                   return (
-                    <div
-                      key={i}
-                      className="nav-link-custom dropdown"
-                      onClick={() => setServicesOpen(!servicesOpen)}
-                    >
-                      {item.name} ▾
+                    <div key={i} className="dropdown">
+                      {/* Mobile: tap to toggle. Desktop: hover via CSS */}
+                      <div
+                        className="services-toggle nav-link-custom"
+                        onClick={() => setServicesOpen(!servicesOpen)}
+                      >
+                        <span>Services</span>
+                        <span className={`services-chevron ${servicesOpen ? "open" : ""}`}>▼</span>
+                      </div>
 
-                      <div className="dropdown-menu">
-                        <NavLink to="/backgroundVerification" onClick={() => setMenuOpen(false)}>
+                      <div className={`dropdown-menu ${servicesOpen ? "mobile-open" : ""}`}>
+                        <NavLink to="/backgroundVerification" onClick={() => { setMenuOpen(false); setServicesOpen(false); }}>
                           Background Verification
                         </NavLink>
-                        <NavLink to="/dataAI" onClick={() => setMenuOpen(false)}>
+                        <NavLink to="/dataAI" onClick={() => { setMenuOpen(false); setServicesOpen(false); }}>
                           Data & AI
                         </NavLink>
-                        <NavLink to="/consultingStaffing" onClick={() => setMenuOpen(false)}>
+                        <NavLink to="/consultingStaffing" onClick={() => { setMenuOpen(false); setServicesOpen(false); }}>
                           Consulting & Staffing
                         </NavLink>
-                        <NavLink to="/networkManagement" onClick={() => setMenuOpen(false)}>
+                        <NavLink to="/networkManagement" onClick={() => { setMenuOpen(false); setServicesOpen(false); }}>
                           Network Management
                         </NavLink>
-                        <NavLink to="/enterprise-management" onClick={() => setMenuOpen(false)}>
+                        <NavLink to="/enterprise-management" onClick={() => { setMenuOpen(false); setServicesOpen(false); }}>
                           Export Management
                         </NavLink>
                       </div>
@@ -235,9 +322,7 @@ const Navbar = () => {
                     to={item.path}
                     onClick={() => setMenuOpen(false)}
                     className={({ isActive }) =>
-                      isActive
-                        ? "nav-link-custom active-link"
-                        : "nav-link-custom"
+                      isActive ? "nav-link-custom active-link" : "nav-link-custom"
                     }
                   >
                     {item.name}
